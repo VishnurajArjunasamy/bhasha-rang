@@ -1,12 +1,28 @@
-# Indic Dub & Translate: Sarvam AI workshop demo
+# Bhasha Rang · भाषा रंग
 
-Openly licensed English content translated and voiced in **Hindi** and **Telugu** with Sarvam AI:
+**Colours of language: stories retold in Hindi and Telugu with Sarvam AI.**
 
-- **Comic** (done): *Pepper&Carrot* Ep. 12 "Autumn Clearout" (David Revoy, CC BY 4.0). Each speech bubble is
-  translated with **Mayura** and voiced with **Bulbul**, then shown over the original artwork.
-- **Video** (Phase B, coming): a Blender open-movie excerpt transcribed with **Saaras**, translated and dubbed.
+🔗 **Live demo:** https://bhasha-rang.vercel.app
 
-The site in `site/` is static, uses no CDNs, and works offline from pre-generated assets, including from `file://`.
+Most of the world's stories reach Indian audiences only in English. Bhasha Rang is a workshop showcase that
+asks how far today's Indian-language AI can close that gap, and where it still needs a human. It takes
+openly licensed English stories and localises them end to end, text and voice, into **Hindi** and **Telugu**
+using only [Sarvam AI](https://www.sarvam.ai) models:
+
+| | What happens | Sarvam models |
+|---|---|---|
+| 📖 **Comic** (*live*) | *Pepper&Carrot* Ep. 12 "Autumn Clearout" by David Revoy (CC BY 4.0). Every speech bubble is translated, placed back into the original artwork, and spoken in a distinct voice per character, with click-to-play bubbles, "Play page" read-along and a side-by-side view of the original. | **Mayura** (translation), **Bulbul v4 Flash** (voices) |
+| 🎬 **Film** (*in progress*) | A 30–60 s excerpt of a Blender open movie is transcribed, translated, dubbed with time-fitted voices and subtitled, then compared with Sarvam's own Dubbing API. | **Saaras v4** (speech-to-text), **Mayura**, **Bulbul**, **Dubbing (beta)** |
+
+**What makes it a good demo:**
+- **Honest:** the pipeline writes a report of what the machine got wrong (mistranslated names, idioms), and
+  any line can be fixed with one line of `config.yaml`. Quality issues stay visible.
+- **Reproducible and cheap:** every API response is cached, so one `make demo` rebuilds everything. The whole comic
+  in two languages cost about ₹11, and reruns cost ₹0.
+- **Works offline:** the static site has no CDNs and bundled Noto fonts, so it runs from `file://` on a projector
+  with no Wi-Fi.
+- **Respects the source:** only openly licensed content is used, with attribution on every page. The artwork is
+  never edited; translations are layered on top.
 
 ## Setup
 

@@ -1,0 +1,79 @@
+# Indic Dub & Translate workshop demo: all knobs live here.
+
+languages:
+  - code: hi-IN
+    label: हिन्दी
+    font: NotoSansDevanagari
+  - code: te-IN
+    label: తెలుగు
+    font: NotoSansTelugu
+
+sarvam:
+  translate_model: mayura:v1
+  translate_mode: classic-colloquial  # most natural, keeps the comic's tone (compared in work/api_notes.md)
+  translate_fallback_mode: formal     # retried when English words are left in the output
+  tts_model: bulbul:v4-flash          # current recommended Bulbul (see work/api_notes.md)
+  tts_codec: mp3
+  tts_sample_rate: 24000
+  min_interval_s:                     # client-side pacing (Starter plan: 60 req/min)
+    translate: 1.0
+    tts: 1.0
+  max_retries: 5
+  price_inr:                          # estimate only, from docs pricing page
+    translate_per_10k_chars: 20
+    tts_per_10k_chars: 30
+
+comic:
+  episode: ep12_Autumn-Clearout       # Pepper&Carrot episode 12 "Autumn Clearout"
+  episode_title: "Episode 12: Autumn Clearout"
+  pages: [E12P01, E12P02, E12P03, E12P04]
+  source_repo_raw: https://framagit.org/peppercarrot/webcomics/-/raw/master
+  site_sources: https://www.peppercarrot.com/0_sources
+  image_res: low-res                  # low-res (1200px wide) is plenty for a projector
+
+  # Speakers that are sound effects: kept as-is (onomatopoeia), not translated, not voiced.
+  non_spoken_speakers: [Sound, Credits, Title, Writing]
+
+  characters:
+    Pepper:   {gender: Female, pace: 1.05}
+    Cayenne:  {gender: Female, pace: 0.95}
+    Carrot:   {gender: Male,   pace: 1.1}
+    Narrator: {gender: Male,   pace: 1.0}
+
+  # Voice per character per language (bulbul:v4-flash persona IDs).
+  voices:
+    hi-IN:
+      Pepper: ritu_hi_social_lively
+      Cayenne: roopa_hi_narration
+      Carrot: chhavi_hi_kids
+      Narrator: anand_hi_documentary
+    te-IN:
+      Pepper: pooja_te_conversation
+      Cayenne: kavitha_te_narration
+      Carrot: kavitha_te_conversation
+      Narrator: tarun_te_narration
+
+  # Character/place names: keep transliterated consistently instead of translated
+  # (e.g. Carrot must not become "गाजर"). `avoid` = literal translations to replace.
+  glossary:
+    Pepper:
+      hi-IN: {name: पेपर, avoid: [काली मिर्च, मिर्च]}
+      te-IN: {name: పెప్పర్, avoid: [మిరియాలు]}
+    Carrot:
+      hi-IN: {name: कैरट, avoid: [गाजर]}
+      te-IN: {name: క్యారెట్, avoid: [క్యారట్]}
+    Cayenne:
+      hi-IN: {name: कायेन, avoid: [लाल मिर्च]}
+      te-IN: {name: కాయెన్, avoid: []}
+    Chaosah:   # Mayura spells it many ways; observed variants are normalised here
+      hi-IN: {name: केओसा, avoid: [चाओसाहन, चैओसाह, चज़ाहा, केओसाह]}
+      te-IN: {name: కేయోసా, avoid: [చాఒసాహ్న్, చాఒసాహ్, చావోస్, కేయోస్సా]}
+    Komona:
+      hi-IN: {name: कोमोना, avoid: []}
+      te-IN: {name: కోమోనా, avoid: []}
+
+  # Manual fixes, keyed "<page>.<bubble id>": speaker or per-language text.
+  # A growl is a sound, not dialogue: Mayura turned "Grrr!" into "grumpy person" in Telugu.
+  speaker_overrides:
+    E12P03.b02: Sound
+  translation_overrides: {}

@@ -1,0 +1,6 @@
+.venv/
+cache/
+work/
+tests/
+src/
+.env

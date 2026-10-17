@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pepper&amp;Carrot in Indian languages</title>
+<style>
+@font-face { font-family: "NotoSans"; src: url("assets/fonts/NotoSans.ttf") format("truetype"); font-weight: 100 900; }
+@font-face { font-family: "NotoSansDevanagari"; src: url("assets/fonts/NotoSansDevanagari.ttf") format("truetype"); font-weight: 100 900; }
+@font-face { font-family: "NotoSansTelugu"; src: url("assets/fonts/NotoSansTelugu.ttf") format("truetype"); font-weight: 100 900; }
+:root {
+  --bg: #101114; --panel: #1b1d22; --text: #f4f4f5; --muted: #a1a1aa;
+  --accent: #ffcc33; --accent-ink: #1a1400; --line: #2e3138; --hl: rgba(255, 204, 51, .55);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--text);
+  font: 18px/1.4 "NotoSans", system-ui, sans-serif; }
+header { position: sticky; top: 0; z-index: 5; background: var(--bg); border-bottom: 1px solid var(--line);
+  display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; padding: 10px 16px; }
+header h1 { font-size: 20px; margin: 0 8px 0 0; white-space: nowrap; }
+header h1 a { color: inherit; text-decoration: none; }
+.group { display: flex; gap: 4px; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 3px; }
+button { font: inherit; font-size: 17px; color: var(--text); background: transparent; border: 0; border-radius: 7px;
+  padding: 6px 12px; cursor: pointer; min-height: 40px; }
+button:hover { background: #2a2d34; }
+button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); font-weight: 700; }
+button:disabled { opacity: .4; cursor: not-allowed; }
+button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+#play { background: var(--accent); color: var(--accent-ink); font-weight: 700; padding: 6px 16px; }
+#play[data-playing="true"] { background: #ef4444; color: #fff; }
+.pageinfo { color: var(--muted); min-width: 92px; text-align: center; align-self: center; }
+[lang="hi-IN"] { font-family: "NotoSansDevanagari", "NotoSans", sans-serif; }
+[lang="te-IN"] { font-family: "NotoSansTelugu", "NotoSans", sans-serif; }
+main { padding: 14px 16px 8px; }
+.stage { display: flex; gap: 16px; justify-content: center; align-items: flex-start; }
+.col { display: flex; flex-direction: column; align-items: center; gap: 6px; min-width: 0; }
+.col .cap { color: var(--muted); font-size: 15px; }
+.fit { position: relative; overflow: hidden; background: #fff; border-radius: 4px; box-shadow: 0 2px 18px rgba(0,0,0,.5); }
+.fit > img { display: block; width: 100%; height: 100%; }
+.pagebox { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+.pagebox > svg.art { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+.bubble { position: absolute; left: 0; top: 0; transform-origin: 0 0; display: flex; align-items: flex-start;
+  justify-content: center; text-align: center; color: #141414; font-weight: 600; line-height: 1.22;
+  overflow: hidden; overflow-wrap: anywhere; border-radius: 40px; }
+.bubble.spoken { cursor: pointer; }
+.bubble.spoken:hover { background: rgba(255, 204, 51, .22); }
+.bubble.sfx { font-family: "NotoSans", sans-serif; font-weight: 800; color: #2b2b2b;
+  text-shadow: 0 0 4px rgba(0,0,0,.55), 0 0 1px #000; }
+.bubble.active { background: var(--hl); box-shadow: 0 0 0 10px var(--hl); }
+.hint { text-align: center; color: var(--muted); font-size: 15px; margin: 8px 0 0; }
+footer { border-top: 1px solid var(--line); margin-top: 14px; padding: 14px 16px 22px; color: var(--muted); font-size: 15px; }
+footer a { color: var(--accent); }
+@media (max-width: 720px) {
+  html, body { font-size: 16px; }
+  header { position: static; }
+  .stage { flex-direction: column; align-items: center; }
+}
+</style>
+</head>
+<body>
+<header>
+  <h1><a href="index.html">Pepper&amp;Carrot</a> · {{TITLE}}</h1>
+  <div class="group" id="langs" role="group" aria-label="Language"></div>
+  <div class="group" role="group" aria-label="View">
+    <button id="v-overlay" aria-pressed="true">Translated</button>
+    <button id="v-side" aria-pressed="false">Side by side</button>
+  </div>
+  <div class="group" role="group" aria-label="Page">
+    <button id="prev" aria-label="Previous page">◀</button>
+    <span class="pageinfo" id="pageinfo"></span>
+    <button id="next" aria-label="Next page">▶</button>
+  </div>
+  <button id="play" data-playing="false">▶ Play page</button>
+</header>
+<main>
+  <div class="stage" id="stage"></div>
+  <p class="hint" id="hint"></p>
+</main>
+<footer>
+  <strong>Pepper&amp;Carrot</strong>, {{TITLE}}, by <strong>David Revoy</strong>,
+  licensed <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>,
+  <a href="https://www.peppercarrot.com">www.peppercarrot.com</a>.
+  The Hindi and Telugu text and voices are <em>derivative works</em> machine-generated with Sarvam AI
+  (Mayura translation, Bulbul text-to-speech) for a workshop demo. They are not official Pepper&amp;Carrot translations.
+  The artwork is unmodified; translated text is layered on top for display.
+  Fonts: Noto Sans (SIL OFL 1.1).
+</footer>
+<script>
+const DATA = {{DATA}};
+const state = { page: 0, lang: DATA.langs[1].code, view: "overlay", playing: false, audio: null, queue: [] };
+const $ = (id) => document.getElementById(id);
+
+function langLabel(code) { return DATA.langs.find(l => l.code === code).label; }
+
+function buildLangButtons() {
+  const g = $("langs");
+  DATA.langs.forEach(l => {
+    const b = document.createElement("button");
+    b.textContent = l.label; b.dataset.lang = l.code;
+    if (l.code !== "en") b.lang = l.code;
+    b.onclick = () => { if (state.view === "side" && l.code === "en") return; setLang(l.code); };
+    g.appendChild(b);
+  });
+}
+
+function originalImg(p) {
+  const fit = document.createElement("div");
+  fit.className = "fit"; fit.dataset.w = p.w; fit.dataset.h = p.h;
+  const img = document.createElement("img");
+  img.src = p.original; img.alt = `Original English page ${state.page + 1}`;
+  fit.appendChild(img);
+  return fit;
+}
+
+function translatedPage(p, lang) {
+  const fit = document.createElement("div");
+  fit.className = "fit"; fit.dataset.w = p.w; fit.dataset.h = p.h;
+  const box = document.createElement("div");
+  box.className = "pagebox"; box.style.width = p.w + "px"; box.style.height = p.h + "px";
+  box.innerHTML = p.svg;
+  p.bubbles.forEach(b => {
+    const d = document.createElement("div");
+    const [a, bb, c, dd, e, f] = b.matrix;
+    d.className = "bubble " + (b.spoken ? "spoken" : "sfx");
+    d.dataset.id = b.id; d.dataset.base = b.base; d.style.color = b.color;
+    d.style.width = b.box[0] + "px"; d.style.height = b.box[1] + "px";
+    d.style.transform = `matrix(${a},${bb},${c},${dd},${e},${f})`;
+    if (b.spoken) {
+      d.lang = lang; d.textContent = b.text[lang];
+      d.title = `${b.speaker} (voice: ${b.voice[lang] || "none"})`;
+      d.onclick = () => { stopAll(); playIds([b.id]); };
+    } else {
+      d.textContent = b.en;
+    }
+    box.appendChild(d);
+  });
+  fit.appendChild(box);
+  return fit;
+}
+
+function column(el, caption) {
+  const col = document.createElement("div");
+  col.className = "col";
+  col.appendChild(el);
+  const cap = document.createElement("div"); cap.className = "cap"; cap.textContent = caption;
+  col.appendChild(cap);
+  return col;
+}
+
+function render() {
+  stopAll();
+  const p = DATA.pages[state.page];
+  const stage = $("stage"); stage.innerHTML = "";
+  if (state.view === "side") {
+    stage.appendChild(column(originalImg(p), "Original (English)"));
+    stage.appendChild(column(translatedPage(p, state.lang), langLabel(state.lang)));
+  } else if (state.lang === "en") {
+    stage.appendChild(column(originalImg(p), "Original (English)"));
+  } else {
+    stage.appendChild(column(translatedPage(p, state.lang), langLabel(state.lang)));
+  }
+  $("pageinfo").textContent = `Page ${state.page + 1} / ${DATA.pages.length}`;
+  $("prev").disabled = state.page === 0;
+  $("next").disabled = state.page === DATA.pages.length - 1;
+  $("play").disabled = state.lang === "en";
+  $("hint").textContent = state.lang === "en"
+    ? "Pick हिन्दी or తెలుగు to see the translated page and hear it."
+    : "Click a speech bubble to hear it, or press “Play page”.";
+  document.querySelectorAll("#langs button").forEach(b => {
+    b.setAttribute("aria-pressed", String(b.dataset.lang === state.lang));
+    b.disabled = state.view === "side" && b.dataset.lang === "en";
+  });
+  $("v-overlay").setAttribute("aria-pressed", String(state.view === "overlay"));
+  $("v-side").setAttribute("aria-pressed", String(state.view === "side"));
+  layout();
+  document.fonts.ready.then(fitText);
+}
+
+function layout() {
+  const cols = document.querySelectorAll(".stage .fit");
+  if (!cols.length) return;
+  const narrow = window.innerWidth <= 720;
+  const header = document.querySelector("header").getBoundingClientRect().height;
+  const availW = (document.querySelector("main").clientWidth - 32 - (cols.length - 1) * 16) / (narrow ? 1 : cols.length);
+  const availH = narrow ? Infinity : window.innerHeight - (header || 0) - 80;
+  cols.forEach(fit => {
+    const w = +fit.dataset.w, h = +fit.dataset.h;
+    const k = Math.min(availW / w, availH / h);
+    fit.style.width = (w * k) + "px"; fit.style.height = (h * k) + "px";
+    const box = fit.querySelector(".pagebox");
+    if (box) box.style.transform = `scale(${k})`;
+  });
+}
+
+// Shrink each bubble's font from its original size until the text fits its box (min 45%).
+function fitText() {
+  document.querySelectorAll(".bubble").forEach(el => {
+    const base = +el.dataset.base;
+    let size = base;
+    el.style.fontSize = size + "px";
+    while ((el.scrollHeight > el.clientHeight + 1 || el.scrollWidth > el.clientWidth + 1) && size > base * 0.45) {
+      size *= 0.94;
+      el.style.fontSize = size + "px";
+    }
+  });
+}
+
+function highlight(id) {
+  document.querySelectorAll(".bubble.active").forEach(e => e.classList.remove("active"));
+  if (id) document.querySelectorAll(`.bubble[data-id="${id}"]`).forEach(e => e.classList.add("active"));
+}
+
+function stopAll() {
+  state.queue = [];
+  if (state.audio) { state.audio.onended = null; state.audio.pause(); state.audio = null; }
+  highlight(null);
+  setPlaying(false);
+}
+
+function setPlaying(on) {
+  state.playing = on;
+  $("play").dataset.playing = String(on);
+  $("play").textContent = on ? "■ Stop" : "▶ Play page";
+}
+
+function playIds(ids) {
+  state.queue = ids.slice();
+  setPlaying(ids.length > 1);
+  next();
+  function next() {
+    const id = state.queue.shift();
+    if (!id) { highlight(null); setPlaying(false); return; }
+    const b = DATA.pages[state.page].bubbles.find(x => x.id === id);
+    const src = b && b.audio[state.lang];
+    if (!src) { next(); return; }
+    highlight(id);
+    const a = new Audio(src);
+    state.audio = a;
+    a.onended = () => setTimeout(next, 250);
+    a.onerror = () => next();
+    a.play().catch(() => next());
+  }
+}
+
+function setLang(code) { state.lang = code; render(); }
+function setView(v) {
+  state.view = v;
+  if (v === "side" && state.lang === "en") state.lang = DATA.langs[1].code;
+  render();
+}
+function go(delta) {
+  const n = state.page + delta;
+  if (n >= 0 && n < DATA.pages.length) { state.page = n; render(); }
+}
+
+buildLangButtons();
+$("v-overlay").onclick = () => setView("overlay");
+$("v-side").onclick = () => setView("side");
+$("prev").onclick = () => go(-1);
+$("next").onclick = () => go(1);
+$("play").onclick = () => state.playing ? stopAll() : playIds(DATA.pages[state.page].order);
+window.addEventListener("resize", layout);
+document.addEventListener("keydown", (e) => {
+  if (e.key === "ArrowLeft") go(-1);
+  if (e.key === "ArrowRight") go(1);
+});
+render();
+</script>
+</body>
+</html>

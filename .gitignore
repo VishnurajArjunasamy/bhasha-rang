@@ -1,0 +1,9 @@
+.env
+cache/
+work/*
+!work/api_notes.md
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.DS_Store
